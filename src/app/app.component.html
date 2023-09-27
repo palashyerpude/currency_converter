@@ -1,0 +1,70 @@
+<div class="ui container">
+  <form
+    class="ui form raised segment"
+    (ngSubmit)="onSubmit()"
+    [formGroup]="form"
+    id="form-container"
+  >
+    <h2 class="ui center aligned header">Currency Converter</h2>
+    <!-- Amount -->
+    <div
+      class="field"
+      [class.error]="form.get('amount').touched && form.get('amount').invalid"
+    >
+      <label for="amount">Amount</label>
+      <input
+        type="number"
+        id="amount"
+        placeholder="Enter Amount"
+        formControlName="amount"
+      />
+      <span
+        *ngIf="form.get('amount').touched && form.get('amount').invalid"
+        class="ui red text"
+      >
+        Please enter amount to convert
+      </span>
+    </div>
+    <!-- Currency to convert from -->
+    <div class="field">
+      <label for="from">From</label>
+      <select name="from" id="from" formControlName="from">
+        <option *ngFor="let currency of currencyCodes" [value]="currency">
+          {{ currency }}
+        </option>
+      </select>
+    </div>
+    <!-- Currency to convert to -->
+    <div
+      #to
+      class="field"
+      [class.error]="
+        form.get('to').touched && form.get('to').value == form.get('from').value
+      "
+    >
+      <label for="to">To</label>
+      <select name="to" id="to" formControlName="to">
+        <option *ngFor="let currency of currencyCodes" [value]="currency">
+          {{ currency }}
+        </option>
+      </select>
+      <span
+        *ngIf="
+          form.get('to').touched &&
+          form.get('to').value == form.get('from').value
+        "
+        class="ui red text"
+      >
+        Currencies must be different
+      </span>
+    </div>
+    <div class="ui inverted green raised segment">{{ resultText }}</div>
+    <button
+      class="ui primary button"
+      [disabled]="form.invalid || to.className == 'field error'"
+      type="submit"
+    >
+      Convert
+    </button>
+  </form>
+</div>
